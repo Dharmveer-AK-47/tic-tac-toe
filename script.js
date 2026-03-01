@@ -406,16 +406,18 @@ class TicTacToe {
     }
     
     shareScore() {
-        const text = `Tic Tac Toe Score - X: ${this.scores.x}, O: ${this.scores.o}, Draws: ${this.scores.draw}`;
+        const gameUrl = window.location.href;
+        const text = `Tic Tac Toe - My Score: X: ${this.scores.x} | O: ${this.scores.o} | Draws: ${this.scores.draw}\n\nPlay here: ${gameUrl}`;
         
         if (navigator.share) {
             navigator.share({
                 title: 'Tic Tac Toe',
-                text: text
+                text: text,
+                url: gameUrl
             });
         } else {
             navigator.clipboard.writeText(text).then(() => {
-                this.showMessage('Score copied to clipboard!');
+                this.showMessage('Score & link copied to clipboard!');
             });
         }
     }
