@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Playing Tic Tac Toe</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="game-header">
+            <a href="setup.html" class="nav-btn"><i class="fas fa-arrow-left"></i></a>
+            <h1 class="game-title">
+                Tic Tac Toe
+            </h1>
+            <div style="width: 36px;"></div> 
+        </header>
+
+        <div class="top-controls">
+            <button class="sound-btn" id="soundToggle" aria-label="Toggle sound">
+                <i class="fas fa-volume-up" id="soundIcon"></i>
+            </button>
+            <button class="icon-btn" id="undoBtn" aria-label="Undo" title="Undo">
+                <i class="fas fa-undo"></i>
+            </button>
+            <button class="icon-btn" id="redoBtn" aria-label="Redo" title="Redo">
+                <i class="fas fa-redo"></i>
+            </button>
+        </div>
+
+        <section class="tournament-info" id="tournamentInfo" style="display:none; text-align: center; margin-bottom: 1rem; background: var(--bg-tertiary); padding: 0.5rem; border-radius: 8px;">
+            <span id="tournamentRound" style="font-weight: bold;">Round 1</span>
+            <div>
+               <span id="tourneyScoreX">X: 0</span> - <span id="tourneyScoreO">O: 0</span>
+               <span style="font-size: 0.8rem; color: var(--text-secondary); margin-left: 0.5rem;">(Best of <span id="bestOfVal">3</span>)</span>
+            </div>
+        </section>
+
+        <div class="game-status" id="gameStatus"><i class="fas fa-gamepad"></i> Game Starting...</div>
+
+        <main class="game-board-container">
+            <div class="game-board" id="gameBoard">
+                <button class="cell" data-index="0"></button>
+                <button class="cell" data-index="1"></button>
+                <button class="cell" data-index="2"></button>
+                <button class="cell" data-index="3"></button>
+                <button class="cell" data-index="4"></button>
+                <button class="cell" data-index="5"></button>
+                <button class="cell" data-index="6"></button>
+                <button class="cell" data-index="7"></button>
+                <button class="cell" data-index="8"></button>
+            </div>
+            <div class="ai-loading" id="aiLoading">
+                <span class="thinking-dots"><span></span><span></span><span></span></span>
+            </div>
+        </main>
+
+        <section class="scoreboard">
+            <div class="score-card x-score">
+                <span class="player-icon" id="scoreIconX"><i class="fas fa-times"></i></span>
+                <span class="score-label" id="scoreLabelX">Player X</span>
+                <span class="score-value" id="xScore">0</span>
+            </div>
+            <div class="score-card draw-score">
+                <span class="score-label"><i class="fas fa-handshake"></i> Draws</span>
+                <span class="score-value" id="drawScore">0</span>
+            </div>
+            <div class="score-card o-score">
+                <span class="player-icon" id="scoreIconO"><i class="fas fa-circle"></i></span>
+                <span class="score-label" id="scoreLabelO">Player O</span>
+                <span class="score-value" id="oScore">0</span>
+            </div>
+        </section>
+
+        <div class="control-buttons">
+            <button class="control-btn restart-btn" id="restartBtn">
+                <i class="fas fa-redo"></i> Restart
+            </button>
+            <button class="control-btn reset-btn" id="resetBtn">
+                <i class="fas fa-trash-alt"></i> Reset Scores
+            </button>
+            <button class="control-btn share-btn" id="shareBtn" style="background: var(--bg-tertiary); color: var(--text-secondary);">
+                <i class="fas fa-share-alt"></i> Share
+            </button>
+        </div>
+
+        <div class="current-player" id="currentPlayerIndicator">
+            <span class="current-icon" id="currentPlayerIcon"><i class="fas fa-times"></i></span>
+            <span id="currentPlayerText">Player X's Turn</span>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal" id="gameModal">
+        <div class="modal-content">
+            <div class="modal-icon" id="modalIcon"><i class="fas fa-trophy"></i></div>
+            <h2 class="modal-title" id="modalTitle">Game Over!</h2>
+            <p class="modal-message" id="modalMessage">Player X Wins!</p>
+            <button class="modal-btn" id="modalBtn"><i class="fas fa-play"></i> Play Again</button>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div class="modal" id="confirmModal">
+        <div class="modal-content">
+            <div class="modal-icon" style="color: var(--accent-x);"><i class="fas fa-exclamation-triangle"></i></div>
+            <h2 class="modal-title">Reset Scores?</h2>
+            <p class="modal-message">Are you sure you want to reset all scores? This cannot be undone.</p>
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 1.5rem;">
+                <button class="modal-btn" id="confirmCancelBtn" style="background: var(--bg-tertiary); color: var(--text-primary);">Cancel</button>
+                <button class="modal-btn" id="confirmYesBtn" style="background: var(--accent-x);">Yes, Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="achievement-toast" id="achievementToast">
+        <i class="fas fa-trophy"></i>
+        <span id="achievementText">Achievement Unlocked!</span>
+    </div>
+
+    <script src="js/state.js"></script>
+    <script src="js/game-core.js"></script>
+    <script src="js/theme.js"></script>
+    <script src="js/ui.js"></script>
+    <!-- Use inline script to initialize to ensure order or create separate main.js -->
+    <!-- I'll put initialization in game.js which I referenced above -->
+    <!-- Wait, I didn't include game.js above. -->
+    <script>
+        // Inline game controller logic from previous step, or load from file
+        // I prefer loading from file.
+    </script>
+    <script src="js/game.js"></script>
+</body>
+</html>

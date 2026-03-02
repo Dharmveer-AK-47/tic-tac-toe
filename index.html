@@ -3,220 +3,501 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Advanced Tic Tac Toe Game">
-    <title>Tic Tac Toe</title>
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>❌</text></svg>">
+    <meta name="description" content="Ultimate Tic Tac Toe Experience">
+    <title>Tic Tac Toe - Ultimate</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Modern Isometric & Neon Styling for Landing Page */
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* Strictly prevent scroll */
+        }
+        
+        .landing-container {
+            position: relative;
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #0f0f1a 100%);
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* Animated Gradient Spheres */
+        .gradient-sphere {
+            position: absolute;
+            border-radius: 50%;
+            /* Removed heavy blur to make them look like 3D balls */
+            z-index: -1; /* Strictly behind everything */
+            opacity: 0.8;
+            box-shadow: inset -25px -25px 40px rgba(0,0,0,0.5), 0 0 30px rgba(255,255,255,0.1);
+            animation: floatSphere 12s infinite ease-in-out;
+            pointer-events: none; /* Ensure they don't block clicks */
+        }
+
+        .sphere-1 {
+            width: 180px;
+            height: 180px;
+            background: radial-gradient(circle at 30% 30%, #ff00cc, #330066); /* Pink/Purple 3D */
+            top: -40px;
+            left: -40px;
+            animation-delay: 0s;
+        }
+
+        .sphere-2 {
+            width: 220px;
+            height: 220px;
+            background: radial-gradient(circle at 30% 30%, #00dbde, #004d40); /* Teal/Dark Green 3D */
+            bottom: -60px;
+            right: -60px;
+            animation-delay: -6s;
+        }
+
+        .sphere-cross {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            bottom: -40px; /* Pushed further down into corner */
+            left: -40px;   /* Pushed further left */
+            z-index: -1;
+            opacity: 0.6;
+            transform: rotate(45deg);
+            animation: floatCross 15s infinite ease-in-out;
+            pointer-events: none;
+        }
+        
+        .sphere-cross::before, .sphere-cross::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(to bottom, #ff1744, #b2102f);
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255, 23, 68, 0.4);
+        }
+
+        .sphere-cross-yellow {
+            width: 120px;
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -30px;   /* Pushed further up into corner */
+            right: -30px; /* Pushed further right */
+            z-index: -1;
+            opacity: 0.7;
+            transform: rotate(25deg);
+            animation: floatCrossRev 18s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        .sphere-cross-yellow::before, .sphere-cross-yellow::after {
+            content: '';
+            position: absolute;
+            background: linear-gradient(to bottom, #ffcc00, #ffaa00);
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(255, 204, 0, 0.4);
+        }
+        
+        .sphere-cross-yellow::before, .sphere-cross::before { width: 30px; height: 100%; }
+        .sphere-cross-yellow::after, .sphere-cross::after { width: 100%; height: 30px; }
+
+        /* Small 3D Animated Circle */
+        .sphere-small-blue {
+            width: 80px;
+            height: 80px;
+            position: absolute;
+            bottom: 5%; /* Moved to very bottom */
+            left: 50%; /* Centered horizontally */
+            transform: translateX(-50%); /* Center alignment */
+            background: radial-gradient(circle at 30% 30%, #4facfe, #00f2fe);
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0.6;
+            box-shadow: inset -10px -10px 20px rgba(0,0,0,0.5), 0 0 15px rgba(0, 242, 254, 0.3);
+            animation: floatSmall 6s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes floatSphere {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(20px) scale(1.05); }
+        }
+        
+        @keyframes floatSmall {
+            0%, 100% { transform: translateX(-50%) translateY(0) scale(1); }
+            50% { transform: translateX(-50%) translateY(-15px) scale(0.9); }
+        }
+
+        @keyframes floatCross {
+            0%, 100% { transform: rotate(45deg) translateY(0); }
+            50% { transform: rotate(55deg) translateY(-20px); }
+        }
+
+        @keyframes floatCrossRev {
+            0%, 100% { transform: rotate(25deg) translateY(0); }
+            50% { transform: rotate(15deg) translateY(20px); }
+        }
+
+        /* Animated Background Grid */
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(67, 97, 238, 0.1) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(67, 97, 238, 0.1) 1px, transparent 1px);
+            background-size: 50px 50px;
+            perspective: 500px;
+            transform-style: preserve-3d;
+            animation: gridMove 20s linear infinite;
+            z-index: -1;
+            opacity: 0.5;
+        }
+
+        @keyframes gridMove {
+            0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
+            100% { transform: perspective(500px) rotateX(60deg) translateY(50px); }
+        }
+
+        /* Floating Symbols Background */
+        .floating-symbol {
+            position: absolute;
+            font-size: 2rem;
+            color: rgba(255, 255, 255, 0.05);
+            animation: floatSymbol 10s infinite linear;
+            z-index: 0;
+        }
+
+        @keyframes floatSymbol {
+             0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+             10% { opacity: 0.2; }
+             90% { opacity: 0.2; }
+             100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Main Content Card */
+        .hero-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            padding: 3rem 4rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            animation: cardEntrance 1s ease-out;
+            max-width: 90%;
+            width: 500px;
+            position: relative; /* Ensure stacking context */
+            z-index: 10; /* Keep above background elements */
+        }
+
+        @keyframes cardEntrance {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .game-logo {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .logo-x { color: var(--accent-x); text-shadow: 0 0 20px rgba(230, 57, 70, 0.4); animation: pulse 2s infinite; }
+        .logo-o { color: var(--accent-o); text-shadow: 0 0 20px rgba(46, 196, 182, 0.4); animation: pulse 2s infinite 1s; }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); filter: brightness(1); }
+            50% { transform: scale(1.1); filter: brightness(1.3); }
+        }
+
+        .game-title-main {
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+            letter-spacing: -1px;
+        }
+
+        .game-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+        }
+
+        /* Interactive Play Button */
+        .action-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .cta-btn {
+            background: linear-gradient(135deg, #000428, #004e92) padding-box,
+                        linear-gradient(45deg, #00c6ff, #0072ff) border-box; /* Dark Navy Gradient content, Bright Border */
+            color: white;
+            border: 3px solid transparent; /* Required for gradient border trick */
+            padding: 1.2rem 3.5rem;
+            font-size: 1.4rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            box-shadow: 0 10px 25px rgba(0, 50, 100, 0.5);
+            transition: all 0.5s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            position: relative;
+            z-index: 2;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .cta-btn:hover {
+            background: linear-gradient(135deg, #004e92, #000428) padding-box,
+                        linear-gradient(45deg, #00f2fe, #4facfe) border-box;
+            color: #ffffff;
+            text-decoration: none;
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(0, 100, 200, 0.4), 0 0 20px rgba(0, 198, 255, 0.4);
+        }
+
+        .cta-btn:active {
+            transform: translateY(1px);
+        }
+
+        /* Progress Bar hidden by default */
+        .loader-wrapper {
+            margin-top: 1.5rem;
+            width: 100%;
+            height: 0;
+            opacity: 0;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+        
+        .loader-wrapper.active {
+            height: 40px;
+            opacity: 1;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-win), var(--accent-primary));
+            box-shadow: 0 0 10px rgba(6, 214, 160, 0.5);
+            border-radius: 4px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* Footer Menu */
+        .footer-menu {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 2rem;
+            flex-wrap: wrap; /* Allow wrapping on small screens */
+            width: 100%;
+        }
+        
+        .menu-item {
+            text-decoration: none;
+            font-size: 1rem; /* Slightly reduced font size */
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center; /* Center content */
+            gap: 8px; /* Slightly reduced gap */
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+            white-space: nowrap; /* Prevent text wrapping */
+            flex: 1 1 auto; /* Allow buttons to grow/shrink properly */
+            min-width: 120px; /* Minimum width to ensure text fits */
+            max-width: 200px; /* Maximum width */
+        }
+
+        .btn-stats {
+            background: linear-gradient(135deg, rgba(79, 172, 254, 0.2) 0%, rgba(0, 242, 254, 0.2) 100%);
+            border: 1px solid rgba(0, 242, 254, 0.5);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.2);
+        }
+
+        .btn-awards {
+            background: linear-gradient(135deg, rgba(255, 153, 102, 0.2) 0%, rgba(255, 94, 98, 0.2) 100%);
+            border: 1px solid rgba(255, 94, 98, 0.5);
+            box-shadow: 0 5px 15px rgba(255, 94, 98, 0.2);
+        }
+        
+        .menu-item:hover {
+            transform: translateY(-3px);
+            text-decoration: none;
+            color: white;
+        }
+
+        .btn-stats:hover {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            box-shadow: 0 8px 25px rgba(0, 242, 254, 0.6);
+            border-color: transparent;
+        }
+
+        .btn-awards:hover {
+            background: linear-gradient(135deg, #FF9966 0%, #FF5E62 100%);
+            box-shadow: 0 8px 25px rgba(255, 94, 98, 0.6);
+            border-color: transparent;
+        }
+        
+        .version {
+            position: absolute;
+            bottom: 1rem;
+            right: 1.5rem;
+            color: rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+        }
+    </style>
 </head>
 <body>
-    <div class="app-container">
-        <header class="game-header">
-            <h1 class="game-title">
-                <i class="fas fa-times"></i>
-                Tic Tac Toe
-                <i class="fas fa-circle"></i>
-            </h1>
-            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                <i class="fas fa-moon"></i>
-            </button>
-        </header>
 
-        <div class="top-controls">
-            <button class="sound-btn" id="soundToggle" aria-label="Toggle sound">
-                <i class="fas fa-volume-up" id="soundIcon"></i>
-            </button>
-            <button class="icon-btn" id="undoBtn" aria-label="Undo" title="Undo (Z)">
-                <i class="fas fa-undo"></i>
-            </button>
-            <button class="icon-btn" id="redoBtn" aria-label="Redo" title="Redo (Y)">
-                <i class="fas fa-redo"></i>
-           
-            <button class="icon-btn" id="statsBtn" aria-label="Stats" title="Stats">
-                <i class="fas fa-chart-bar"></i>
-            </button>
-            <button class="icon-btn" id="achievementsBtn" aria-label="Achievements" title="Achievements">
-                <i class="fas fa-trophy"></i>
-            </button>
-        </div>
+    <div class="landing-container">
+        <!-- Animated Background Elements: Spheres & Crosses -->
+        <div class="gradient-sphere sphere-1"></div>
+        <div class="gradient-sphere sphere-2"></div>
+        <div class="sphere-cross"></div>
+        <div class="sphere-cross-yellow"></div>
+        <div class="sphere-small-blue"></div>
 
-        <section class="player-names">
-            <div class="player-name-input">
-                <button class="avatar-btn" id="avatarXBtn">
-                    <span class="avatar" id="avatarX"><i class="fas fa-times"></i></span>
+        <!-- Animated Background Elements -->
+        <div class="bg-grid"></div>
+        <div id="floatingSymbols"></div>
+
+        <div class="hero-card">
+            <div class="game-logo">
+                <i class="fas fa-times logo-x"></i>
+                <i class="fas fa-circle logo-o"></i>
+            </div>
+            
+            <h1 class="game-title-main">TIC TAC TOE</h1>
+            <p class="game-subtitle">The Classic Game Reimagined</p>
+
+            <div class="action-container">
+                <button id="playBtn" class="cta-btn">
+                    <i class="fas fa-play"></i> START GAME
                 </button>
-                <input type="text" id="playerXName" placeholder="Player X" maxlength="12">
+                
+                <div class="loader-wrapper" id="loaderWrapper">
+                    <div class="progress-track">
+                        <div class="progress-bar" id="progressBar"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span>Loading assets...</span>
+                        <span id="progressPercent">0%</span>
+                    </div>
+                </div>
             </div>
-            <div class="vs">VS</div>
-            <div class="player-name-input">
-                <input type="text" id="playerOName" placeholder="Player O" maxlength="12">
-                <button class="avatar-btn" id="avatarOBtn">
-                    <span class="avatar" id="avatarO"><i class="fas fa-circle"></i></span>
-                </button>
-            </div>
-        </section>
 
-        <div class="modal" id="avatarModal">
-            <div class="modal-content small">
-                <h3 class="modal-title"><i class="fas fa-user-circle"></i> Choose Avatar</h3>
-                <div class="avatar-grid" id="avatarGrid"></div>
-                <button class="modal-btn" id="closeAvatarModal"><i class="fas fa-times"></i> Cancel</button>
+            <div class="footer-menu">
+                <a href="stats.html" class="menu-item btn-stats"><i class="fas fa-chart-line"></i> Stats</a>
+                <a href="achievements.html" class="menu-item btn-awards"><i class="fas fa-trophy"></i> Awards</a>
             </div>
         </div>
-
-        <section class="mode-selection">
-            <div class="mode-buttons">
-                <button class="mode-btn active" data-mode="pvp" id="pvpBtn">
-                    <i class="fas fa-users"></i> PvP
-                </button>
-                <button class="mode-btn" data-mode="ai" id="aiBtn">
-                    <i class="fas fa-robot"></i> PvAI
-                </button>
-                <button class="mode-btn" data-mode="tournament" id="tournamentBtn">
-                    <i class="fas fa-crown"></i> Tournament
-                </button>
-            </div>
-        </section>
-
-        <section class="tournament-settings" id="tournamentSettings" style="display:none;">
-            <div class="tournament-info">
-                <span id="tournamentRound"><i class="fas fa-list-ol"></i> Round 1/3</span>
-                <span id="tournamentScore"><i class="fas fa-scoreboard"></i> X: 0 - O: 0</span>
-            </div>
-            <div class="best-of-selector">
-                <span>Best of:</span>
-                <button class="best-of-btn active" data-best="3">3</button>
-                <button class="best-of-btn" data-best="5">5</button>
-            </div>
-        </section>
-
-        <section class="difficulty-selection" id="difficultySection" style="display:none;">
-            <div class="difficulty-buttons">
-                <button class="diff-btn" data-difficulty="easy"><i class="fas fa-smile"></i> Easy</button>
-                <button class="diff-btn active" data-difficulty="medium"><i class="fas fa-meh"></i> Medium</button>
-                <button class="diff-btn" data-difficulty="hard"><i class="fas fa-frown"></i> Hard</button>
-            </div>
-        </section>
-
-        <div class="game-status" id="gameStatus"><i class="fas fa-gamepad"></i> Player X's Turn</div>
-
-        <main class="game-board-container">
-            <div class="game-board" id="gameBoard">
-                <button class="cell" data-index="0"></button>
-                <button class="cell" data-index="1"></button>
-                <button class="cell" data-index="2"></button>
-                <button class="cell" data-index="3"></button>
-                <button class="cell" data-index="4"></button>
-                <button class="cell" data-index="5"></button>
-                <button class="cell" data-index="6"></button>
-                <button class="cell" data-index="7"></button>
-                <button class="cell" data-index="8"></button>
-            </div>
-            <div class="particles" id="particles"></div>
-        </main>
-
-        <section class="scoreboard">
-            <div class="score-card x-score">
-                <span class="player-icon" id="scoreIconX"><i class="fas fa-times"></i></span>
-                <span class="score-label" id="scoreLabelX">Player X</span>
-                <span class="score-value" id="xScore">0</span>
-            </div>
-            <div class="score-card draw-score">
-                <span class="score-label"><i class="fas fa-handshake"></i> Draws</span>
-                <span class="score-value" id="drawScore">0</span>
-            </div>
-            <div class="score-card o-score">
-                <span class="player-icon" id="scoreIconO"><i class="fas fa-circle"></i></span>
-                <span class="score-label" id="scoreLabelO">Player O</span>
-                <span class="score-value" id="oScore">0</span>
-            </div>
-        </section>
-
-        <div class="control-buttons">
-            <button class="control-btn restart-btn" id="restartBtn">
-                <i class="fas fa-redo"></i> Restart
-            </button>
-            <button class="control-btn reset-btn" id="resetBtn">
-                <i class="fas fa-trash-alt"></i> Reset
-            </button>
-            <button class="control-btn share-btn" id="shareBtn">
-                <i class="fas fa-share-alt"></i> Share
-            </button>
-        </div>
-
-        <div class="current-player" id="currentPlayerIndicator">
-            <span class="current-icon" id="currentPlayerIcon"><i class="fas fa-times"></i></span>
-            <span id="currentPlayerText">Player X's Turn</span>
-        </div>
-
-        <div class="ai-loading" id="aiLoading">
-            <span class="thinking-dots"><span></span><span></span><span></span></span>
-        </div>
-
-        <div class="replay-controls" id="replayControls" style="display:none;">
-            <button class="icon-btn" id="replayPrev"><i class="fas fa-step-backward"></i></button>
-            <button class="icon-btn" id="replayPlay"><i class="fas fa-play"></i></button>
-            <button class="icon-btn" id="replayNext"><i class="fas fa-step-forward"></i></button>
-            <span id="replayStep"><i class="fas fa-list"></i> Move 0/0</span>
-            <button class="icon-btn" id="replayClose"><i class="fas fa-times"></i></button>
-        </div>
+        
+        <div class="version">v2.0.0</div>
     </div>
 
-    <div class="modal" id="gameModal">
-        <div class="modal-content">
-            <div class="modal-icon" id="modalIcon"><i class="fas fa-trophy"></i></div>
-            <h2 class="modal-title" id="modalTitle"><i class="fas fa-flag-checkered"></i> Game Over!</h2>
-            <p class="modal-message" id="modalMessage">Player X Wins!</p>
-            <button class="modal-btn" id="modalBtn"><i class="fas fa-play"></i> Play Again</button>
-        </div>
-    </div>
+    <script src="js/theme.js"></script>
+    <script>
+        // Generate Floating Symbols
+        const symbolsContainer = document.getElementById('floatingSymbols');
+        const symbols = ['fa-times', 'fa-circle', 'fa-square', 'fa-star', 'fa-heart'];
+        
+        for(let i=0; i<15; i++) {
+            const sym = document.createElement('i');
+            sym.className = `fas ${symbols[Math.floor(Math.random() * symbols.length)]} floating-symbol`;
+            sym.style.left = `${Math.random() * 100}%`;
+            sym.style.animationDuration = `${Math.random() * 10 + 10}s`; // 10-20s
+            sym.style.animationDelay = `${Math.random() * 5}s`;
+            sym.style.fontSize = `${Math.random() * 2 + 1}rem`;
+            symbolsContainer.appendChild(sym);
+        }
 
-    <div class="modal" id="statsModal">
-        <div class="modal-content">
-            <h2 class="modal-title"><i class="fas fa-chart-bar"></i> Statistics</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="stat-label"><i class="fas fa-games"></i> Total Games</div>
-                    <div class="stat-value" id="statTotal">0</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label"><i class="fas fa-percentage"></i> Win Rate</div>
-                    <div class="stat-value" id="statWinRate">0%</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label"><i class="fas fa-fire"></i> Current Streak</div>
-                    <div class="stat-value" id="statStreak">0</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label"><i class="fas fa-star"></i> Best Streak</div>
-                    <div class="stat-value" id="statBestStreak">0</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label"><i class="fas fa-bolt"></i> Fastest Win</div>
-                    <div class="stat-value" id="statFastest">-</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-label"><i class="fas fa-check-double"></i> Perfect Games</div>
-                    <div class="stat-value" id="statPerfect">0</div>
-                </div>
-            </div>
-            <button class="modal-btn" id="closeStatsModal"><i class="fas fa-times"></i> Close</button>
-        </div>
-    </div>
+        // Logic for Play Button
+        const playBtn = document.getElementById('playBtn');
+        const loaderWrapper = document.getElementById('loaderWrapper');
+        const progressBar = document.getElementById('progressBar');
+        const progressPercent = document.getElementById('progressPercent');
 
-    <div class="modal" id="achievementsModal">
-        <div class="modal-content">
-            <h2 class="modal-title"><i class="fas fa-trophy"></i> Achievements</h2>
-            <div class="achievements-list" id="achievementsList"></div>
-            <button class="modal-btn" id="closeAchievementsModal"><i class="fas fa-times"></i> Close</button>
-        </div>
-    </div>
+        playBtn.addEventListener('click', () => {
+             // 1. Change UI state
+             playBtn.style.transform = 'scale(0.95)';
+             playBtn.style.opacity = '0.5';
+             playBtn.style.pointerEvents = 'none';
+             playBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> INITIALIZING...';
+             
+             loaderWrapper.classList.add('active');
 
-    <div class="achievement-toast" id="achievementToast">
-        <i class="fas fa-trophy"></i>
-        <span id="achievementText">Achievement Unlocked!</span>
-    </div>
+             // 2. Run Progress Logic (0-100% in 5s)
+             let progress = 0;
+             const duration = 5000;
+             const stepTime = 50;
+             const steps = duration / stepTime; // 100 steps
+             const increment = 100 / steps; 
 
-    <script src="script.js"></script>
+             const timer = setInterval(() => {
+                 progress += increment;
+                 if(progress >= 100) {
+                     progress = 100;
+                     clearInterval(timer);
+                     progressBar.style.width = '100%';
+                     progressPercent.textContent = '100%';
+                     
+                     // 3. Redirect
+                     setTimeout(() => {
+                         window.location.href = 'setup.html';
+                     }, 400);
+                 } else {
+                     progressBar.style.width = `${progress}%`;
+                     progressPercent.textContent = `${Math.round(progress)}%`;
+                 }
+             }, stepTime);
+        });
+    </script>
 </body>
 </html>

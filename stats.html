@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe - Statistics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="game-header">
+            <a href="index.html" class="nav-btn"><i class="fas fa-arrow-left"></i></a>
+            <h1 class="game-title">Statistics</h1>
+            <div style="width: 36px;"></div> 
+        </header>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-label"><i class="fas fa-games"></i> Total Games</div>
+                <div class="stat-value" id="statTotal">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label"><i class="fas fa-percentage"></i> Win Rate (X)</div>
+                <div class="stat-value" id="statWinRate">0%</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label"><i class="fas fa-fire"></i> Current Streak</div>
+                <div class="stat-value" id="statStreak">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label"><i class="fas fa-star"></i> Best Streak</div>
+                <div class="stat-value" id="statBestStreak">0</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label"><i class="fas fa-bolt"></i> Fastest Win</div>
+                <div class="stat-value" id="statFastest">-</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label"><i class="fas fa-check-double"></i> X Wins</div>
+                <div class="stat-value" id="statXWins">0</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 2rem;">
+            <button id="resetStatsBtn" class="menu-btn" style="background: var(--accent-x); color: white;">
+                <i class="fas fa-trash-alt"></i> Reset All Stats
+            </button>
+        </div>
+    </div>
+
+    <script src="js/state.js"></script>
+    <script src="js/theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const state = new GameState();
+            const s = state.state.stats;
+            
+            document.getElementById('statTotal').textContent = s.totalGames;
+            const winRate = s.totalGames > 0 ? Math.round((s.xWins / s.totalGames) * 100) : 0;
+            document.getElementById('statWinRate').textContent = winRate + '%';
+            document.getElementById('statStreak').textContent = s.currentStreak;
+            document.getElementById('statBestStreak').textContent = s.bestStreak;
+            document.getElementById('statFastest').textContent = s.fastestWin ? s.fastestWin + ' moves' : '-';
+            document.getElementById('statXWins').textContent = s.xWins;
+
+            document.getElementById('resetStatsBtn').addEventListener('click', () => {
+                if(confirm('Are you sure you want to reset all game statistics? This cannot be undone.')) {
+                    state.resetScores(); // Clean scores
+                    state.state.stats = { 
+                        totalGames: 0, xWins: 0, oWins: 0, draws: 0, 
+                        currentStreak: 0, bestStreak: 0, fastestWin: null, perfectGames: 0 
+                    };
+                    state.save();
+                    window.location.reload();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

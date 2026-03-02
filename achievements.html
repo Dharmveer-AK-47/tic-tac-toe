@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tic Tac Toe - Achievements</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="app-container">
+        <header class="game-header">
+            <a href="index.html" class="nav-btn"><i class="fas fa-arrow-left"></i></a>
+            <h1 class="game-title">Achievements</h1>
+            <div style="width: 36px;"></div> 
+        </header>
+
+        <div class="achievements-list" id="achievementsList">
+            <!-- Populated via JS -->
+        </div>
+    </div>
+
+    <script src="js/state.js"></script>
+    <script src="js/theme.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const state = new GameState();
+            const list = document.getElementById('achievementsList');
+            
+            list.innerHTML = state.state.achievements.map(a => `
+                <div class="achievement-item ${a.unlocked ? 'unlocked' : 'locked'}">
+                    <i class="fas ${a.icon}" style="color: ${a.unlocked ? 'var(--accent-primary)' : 'var(--text-secondary)'}"></i>
+                    <div class="achievement-info">
+                        <span class="achievement-name">${a.name} ${a.unlocked ? '<i class="fas fa-check" style="font-size: 0.8rem; color: var(--accent-win);"></i>' : ''}</span>
+                        <span class="achievement-desc">${a.desc}</span>
+                    </div>
+                </div>
+            `).join('');
+        });
+    </script>
+</body>
+</html>
